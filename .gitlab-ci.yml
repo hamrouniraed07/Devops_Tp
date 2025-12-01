@@ -1,0 +1,32 @@
+image: docker:24
+
+services:
+  - docker:24-dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: "1"
+  IMAGE_SERVER: raefgaied4/mern-server
+  IMAGE_CLIENT: raefgaied4/mern-client
+
+stages:
+  - build_push
+
+build_push_server:
+  stage: build_push
+  rules:
+    - changes: ["server/**/*"]
+  script:
+    - docker login -u "$DOCKERHUB_USER" -p "$DOCKERHUB_TOKEN"
+    - docker build -t "$IMAGE_SERVER:$CI_COMMIT_SHORT_SHA" server
+    - docker push "$IMAGE_SERVER:$CI_COMMIT_SHORT_SHA"
+
+build_push_client:
+  stage: build_push
+  rules:
+    - changes: ["client/**/*"]
+  script:
+    - docker login -u "$DOCKERHUB_USER" -p "$DOCKERHUB_TOKEN"
+    - docker build -t "$IMAGE_CLIENT:$CI_COMMIT_SHORT_SHA" client
+    - docker push "$IMAGE_CLIENT:$CI_COMMIT_SHORT_SHA"
