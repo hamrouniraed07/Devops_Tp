@@ -49,28 +49,74 @@ Après avoir ajouté les Dockerfiles pour le client et le serveur, ainsi que les
 2. Clonez ce dépôt sur votre machine locale.
 3. Accédez au répertoire du projet dans votre terminal.
 4. Construisez l'image Docker pour le client :
-   ```bash
+```bash
    docker build -t mern_client ./client
-   ```
-   (Voir capture d'écran : `build_mern_client.png`)
-5. Construisez l'image Docker pour le serveur :
-   ```bash
-   docker build -t mern_server ./server
-   ```
-   (Voir capture d'écran : `compose_mern_server.png`)
-6. Construisez les services avec Docker Compose :
-   ```bash
-   docker-compose build
-   ```
-   (Voir capture d'écran : `Compose_build.png`)
-7. Démarrez l'application en utilisant Docker Compose :
-   ```bash
-   docker-compose up
-   ```
-8. Accédez au client à [http://localhost:3000](http://localhost:3000).
-9. Pour arrêter l'application :
-   ```bash
-   docker-compose down
-   ```
-   (Voir capture d'écran : `Compose_down.png`)
+```
+   ![Build Client](./build_mern_client.png)
 
+5. Construisez l'image Docker pour le serveur :
+```bash
+   docker build -t mern_server ./server
+```
+   ![Build Server](./compose_mern_server.png)
+
+6. Construisez les services avec Docker Compose :
+```bash
+   docker-compose build
+```
+   ![Compose Build](./Compose_build.png)
+
+7. Démarrez l'application en utilisant Docker Compose :
+```bash
+   docker-compose up
+```
+   ![Compose Up](./Compose_up.png)
+
+8. Accédez au client à [http://localhost:3000](http://localhost:3000).
+
+   ![Application Running](./App_running.png)
+
+9. Pour arrêter l'application :
+```bash
+   docker-compose down
+```
+   ![Compose Down](./Compose_down.png)
+
+## Structure du Projet
+```
+.
+├── client/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── src/
+├── server/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── routes/
+├── screenshots/
+│   ├── build_mern_client.png
+│   ├── compose_mern_server.png
+│   ├── Compose_build.png
+│   ├── Compose_up.png
+│   ├── Compose_down.png
+│   └── app_running.png
+├── docker-compose.yml
+└── README.md
+```
+
+## Captures d'Écran
+
+### Build de l'image Client
+![Build Client](./build_mern_client.png)
+
+### Build de l'image Serveur
+![Build Server](./compose_mern_server.png)
+
+### Docker Compose Build
+![Compose Build](./Compose_build.png)
+
+### Docker Compose Up
+![Compose Up](./Compose_up.png)
+
+### Docker Compose Down
+![Compose Down](./Compose_down.png)
