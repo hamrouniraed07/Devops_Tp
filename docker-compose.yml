@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Service MongoDB
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    networks:
+      - mern-network
+    volumes:
+      - mongo-data:/data/db
+
+  # Service Serveur (Express)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - "9000:9000"
+    networks:
+      - mern-network
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/mern
+    depends_on:
+      - mongodb
+
+  # Service Client (React)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - "3000:3000"
+    networks:
+      - mern-network
+    depends_on:
+      - server
+
+# Définition du réseau
+networks:
+  mern-network:
+    driver: bridge
+
+# Définition des volumes pour persister les données MongoDB
+volumes:
+  mongo-data:
+
