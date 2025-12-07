@@ -6,15 +6,15 @@ pipeline {
     }
     
     environment {
-        IMAGE_SERVER = 'votre_username/mern-server'  // À MODIFIER
-        IMAGE_CLIENT = 'votre_username/mern-client'  // À MODIFIER
+        IMAGE_SERVER = 'hamrouniraed07/mern-server'  
+        IMAGE_CLIENT = 'hamrouniraed07/mern-client'  
     }
     
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'git@gitlab.com:votre-group/votre-repo.git',  // À MODIFIER
+                    url: 'git@github.com:hamrouniraed07/Devops_Tp.git',  
                     credentialsId: 'gitlab_ssh'
             }
         }
@@ -62,10 +62,18 @@ pipeline {
                 changeset 'server/**' 
             }
             steps {
-                sh '''
-                    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy image $IMAGE_SERVER:${BUILD_NUMBER} > trivy_server_report.txt
-                '''
+                script {
+                    sh '''
+                        echo "=== Scanning SERVER image with Trivy ==="
+                        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                            aquasec/trivy image --format table --severity CRITICAL,HIGH,MEDIUM \
+                            $IMAGE_SERVER:${BUILD_NUMBER} | tee trivy_server_report.txt
+                        
+                        echo ""
+                        echo "=== Trivy Scan Summary for SERVER ==="
+                        grep -E "Total:|CRITICAL|HIGH|MEDIUM" trivy_server_report.txt || echo "Aucune vulnérabilité majeure détectée"
+                    '''
+                }
                 archiveArtifacts artifacts: 'trivy_server_report.txt', allowEmptyArchive: true
             }
         }
@@ -75,10 +83,18 @@ pipeline {
                 changeset 'client/**' 
             }
             steps {
-                sh '''
-                    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy image $IMAGE_CLIENT:${BUILD_NUMBER} > trivy_client_report.txt
-                '''
+                script {
+                    sh '''
+                        echo "=== Scanning CLIENT image with Trivy ==="
+                        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                            aquasec/trivy image --format table --severity CRITICAL,HIGH,MEDIUM \
+                            $IMAGE_CLIENT:${BUILD_NUMBER} | tee trivy_client_report.txt
+                        
+                        echo ""
+                        echo "=== Trivy Scan Summary for CLIENT ==="
+                        grep -E "Total:|CRITICAL|HIGH|MEDIUM" trivy_client_report.txt || echo "Aucune vulnérabilité majeure détectée"
+                    '''
+                }
                 archiveArtifacts artifacts: 'trivy_client_report.txt', allowEmptyArchive: true
             }
         }
