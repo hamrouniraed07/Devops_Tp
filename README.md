@@ -82,6 +82,10 @@ Après avoir ajouté les Dockerfiles pour le client et le serveur, ainsi que les
 ```
    ![Compose Down](./Compose_down.png)
 
+## Configuration Jenkins
+
+![Lancement de Jenkins](./Lancer%20Jenkins.png)
+
 ## Structure du Projet
 ```
 .
